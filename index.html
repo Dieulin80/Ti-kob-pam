@@ -1,1 +1,146 @@
-# Ti-kob-pam
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ti Kòb Pam – Yon biznis jis reyèl</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#F6F9FB;--surface:#FFFFFF;--ink:#0F2A43;--muted:#4A6074;--line:#D5E0E8;--orange:#F28C28;--green:#2F9E4F;--pink:#D6336C;--btn:#0F2A43;--btnink:#FFFFFF;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1A28;--surface:#13283B;--ink:#EAF2F8;--muted:#9DB3C4;--line:#243D52;--btn:#F28C28;--btnink:#0C1A28}}
+:root[data-theme="dark"]{--bg:#0C1A28;--surface:#13283B;--ink:#EAF2F8;--muted:#9DB3C4;--line:#243D52;--btn:#F28C28;--btnink:#0C1A28}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;margin:0}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:20px 0;display:flex;justify-content:space-between;align-items:center}
+.logo{font:800 20px "Bricolage Grotesque",system-ui,sans-serif}
+.logo span{display:inline-block;width:10px;height:16px;border-radius:3px 3px 5px 5px;margin-right:3px;vertical-align:-2px}
+nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:15px}
+.hero{padding:36px 0 56px;display:grid;gap:36px}
+@media(min-width:760px){.hero{grid-template-columns:1.2fr 1fr;align-items:center}}
+h1{font-size:clamp(34px,7vw,58px);font-weight:800;letter-spacing:-.02em}
+.lead{color:var(--muted);font-size:19px;max-width:46ch;margin:18px 0 26px}
+.btn{display:inline-block;background:var(--btn);color:var(--btnink);padding:14px 24px;border-radius:10px;font-weight:600;text-decoration:none}
+.sachets{display:flex;gap:14px;justify-content:center;align-items:flex-end}
+.sachet{width:84px;border-radius:10px 10px 22px 22px;position:relative;box-shadow:inset 0 -10px 0 rgba(0,0,0,.12)}
+.sachet::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 5px,transparent 5px 10px);border-radius:10px 10px 0 0}
+.s1{height:210px;background:var(--orange)}.s2{height:260px;background:var(--green)}.s3{height:180px;background:var(--pink)}
+.facts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-bottom:56px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.fact b{font:800 34px "Bricolage Grotesque",system-ui,sans-serif;display:block}
+.fact span{color:var(--muted)}
+section{margin-bottom:56px}
+h2{font-size:clamp(26px,5vw,36px);margin-bottom:10px}
+.sub{color:var(--muted);margin:0 0 22px;max-width:60ch}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card h3{font-size:21px;margin-bottom:8px}
+.card p{margin:0;color:var(--muted)}
+.tag{display:inline-block;font-weight:600;font-size:14px;padding:3px 10px;border-radius:99px;margin-bottom:12px;color:#fff}
+.o{background:var(--orange);color:#1b1206}.g{background:var(--green)}.p{background:var(--pink)}
+.note{border-left:5px solid var(--orange);background:var(--surface);border-radius:0 14px 14px 0;padding:20px 22px}
+.note p{margin:6px 0 0;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);font-size:15px}
+
+.space{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.space form{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.space input{flex:1;min-width:200px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.space button{border:0;cursor:pointer;font:600 17px "Source Sans 3",system-ui,sans-serif}
+.res{margin-top:20px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.res div{border:1px solid var(--line);border-radius:12px;padding:14px}
+.res b{display:block;font:800 26px "Bricolage Grotesque",system-ui,sans-serif}
+.res span{color:var(--muted);font-size:15px}
+.err{color:var(--pink);margin-top:14px}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo"><span style="background:var(--orange)"></span><span style="background:var(--green)"></span><span style="background:var(--pink)"></span>Ti Kòb Pam</div>
+  <nav><a href="#kijan">Kijan l mache</a><a href="#regl">Règ yo</a></nav>
+</header>
+
+<div class="hero">
+  <div>
+    <h1>Yon biznis jis reyèl, ou ka pran pati ladan l.</h1>
+    <p class="lead">Nou fè jis nan sachè nan pwòp atelye nou. Antre kòm manb, mete epay ou, epi resevwa yon pataj pwofi reyèl biznis la.</p>
+    <a class="btn" href="#kijan">Kijan pou antre</a>
+  </div>
+  <div class="sachets" aria-hidden="true"><div class="sachet s1"></div><div class="sachet s2"></div><div class="sachet s3"></div></div>
+</div>
+
+<div class="facts">
+  <div class="fact"><b>4</b><span>machin ki ranpli sachè</span></div>
+  <div class="fact"><b>500</b><span>sachè pa machin chak jou</span></div>
+  <div class="fact"><b>30</b><span>manb deja nan òganizasyon an</span></div>
+</div>
+
+<section id="kijan">
+  <h2>Kijan l mache</h2>
+  <p class="sub">Senp, ak chif klè.</p>
+  <div class="grid">
+    <div class="card"><span class="tag o">250 gouds</span><h3>Adezyon</h3><p>Ou peye 250 gouds yon sèl fwa pou vin manb. Sa kouvri sit la ak jesyon òganizasyon an.</p></div>
+    <div class="card"><span class="tag g">Retrè lib</span><h3>Epay ou</h3><p>Ou ka mete lajan sou kont ou. Se lajan w, ou ka retire l lè w bezwen li, san minimòm pou ou rive.</p></div>
+    <div class="card"><span class="tag p">Chak mwa</span><h3>Pataj pwofi</h3><p>Nou pataje yon pati nan pwofi reyèl atelye a ak manb yo, selon sa chak moun mete. Pousantaj la depann de vant yo.</p></div>
+    <div class="card"><span class="tag o">25 gouds</span><h3>Bonis byenveni</h3><p>Chak nouvo manb resevwa 25 gouds sou kont li lè l antre.</p></div>
+    <div class="card"><span class="tag g">100 gouds</span><h3>Bonis parennaj</h3><p>Si w mennen yon moun nan òganizasyon an, ou resevwa 100 gouds apre li fin peye 250 gouds adezyon an. Bonis la se pou moun ou mennen dirèkteman sèlman.</p></div>
+    <div class="card"><span class="tag p">Disponib</span><h3>Espas manb</h3><p>Chak manb ap antre ak kòd li pou wè solde li, depo li yo ak pataj pwofi li.</p></div>
+  </div>
+</section>
+
+<section id="regl">
+  <h2>Règ nou swiv</h2>
+  <p class="sub">Nou pa pwomèt pousantaj garanti. Pwofi a soti nan vant jis la.</p>
+  <div class="note">
+    <strong>Anvan w antre, konnen sa:</strong>
+    <p>Pwofi pa garanti. Si vant yo bese, pataj la bese tou. Se pou sa nou montre rezilta reyèl yo bay manb yo chak mwa, epi nou kenbe yon rezèv pou jou ki pa bon yo.</p>
+  </div>
+</section>
+
+<section id="espas">
+  <h2>Espas manb</h2>
+  <p class="sub">Antre kòd ou pou wè solde w ak estimasyon pataj pwofi w pou mwa a.</p>
+  <div class="space">
+    <form id="f"><input id="code" placeholder="Kòd ou" autocomplete="off" required><button class="btn" type="submit">Gade solde m</button></form>
+    <div id="out"></div>
+  </div>
+</section>
+
+<footer>© Ti Kòb Pam. Nou pale sou biznis la ak manb yo ouvètman.</footer>
+</div>
+<script>
+const SUPABASE_URL = "https://qmnocwhjkxqzjycnzeki.supabase.co";      // egzanp: https://abcd1234.supabase.co
+const SUPABASE_ANON_KEY = "sb_publishable_pstIMf9lDGKmvxG3369d1w_xFHtiH4L";     // kle "anon public" nan Supabase
+const fmt = n => Number(n).toLocaleString("fr-FR") + " gouds";
+document.getElementById("f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const out = document.getElementById("out");
+  const code = document.getElementById("code").value.trim();
+  out.textContent = "Y ap chèche...";
+  try {
+    const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_my_space", {
+      method: "POST",
+      headers: {"Content-Type": "application/json", apikey: SUPABASE_ANON_KEY},
+      body: JSON.stringify({p_code: code})
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error();
+    if (!d) { out.innerHTML = '<p class="err">Kòd sa a pa egziste. Verifye l epi eseye ankò.</p>'; return; }
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    out.innerHTML = '<p style="margin:16px 0 0"><strong>Bonjou ' + esc(d.name) + '</strong></p><div class="res">' +
+      '<div><b>' + fmt(d.balance) + '</b><span>Solde total</span></div>' +
+      '<div><b>' + fmt(d.deposit) + '</b><span>Depo ou</span></div>' +
+      '<div><b>' + fmt(d.welcome_bonus + d.referral_bonus) + '</b><span>Bonis yo</span></div>' +
+      '<div><b>≈ ' + fmt(d.estimate) + '</b><span>Estimasyon pataj ' + esc(d.month || "mwa sa a") + '</span></div></div>' +
+      '<p class="sub" style="margin-top:14px">Estimasyon an pa garanti: li depann de pwofi reyèl atelye a.</p>';
+  } catch (err) {
+    out.innerHTML = '<p class="err">Pa t kapab chaje done yo. Eseye ankò pita.</p>';
+  }
+});
+</script>
+</body>
+</html>
