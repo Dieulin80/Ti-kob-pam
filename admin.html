@@ -28,6 +28,7 @@ small{color:var(--mu)}.err{color:var(--p)}
 <div class="row"><input id="np" type="number" placeholder="Pwofi net mwa a (gouds)"><input id="ml" placeholder="Mwa (egzanp oktòb)"><button id="sv" class="o">Sove</button></div></div>
 <div class="card"><h2>Ajoute yon manb</h2>
 <div class="row"><input id="an" placeholder="Non"><input id="ap" type="tel" placeholder="Telefòn"><button id="ad">Ajoute</button></div></div>
+<div class="card"><h2>Retrè an atant (<span id="wc">0</span>)</h2><div id="wl"></div></div>
 <div class="card"><h2>Manb yo (<span id="cnt">0</span>)</h2><div id="list"></div></div>
 </div>
 <script>
@@ -43,6 +44,10 @@ $("go").onclick=async()=>{$("lerr").textContent="";
  catch(e){$("lerr").textContent="Imèl oswa modpas pa bon."}};
 async function load(){
  try{const s=await api("settings?id=eq.1");if(s&&s[0]){$("np").value=s[0].net_profit;$("ml").value=s[0].month_label||""}
+ const wd=await api("withdrawals?select=*,members(name,phone)&status=eq.pending&order=created_at.asc");$("wc").textContent=wd.length;
+ $("wl").innerHTML=wd.map(w=>{const h=Math.floor((Date.now()-new Date(w.created_at))/6e4);return `<div class="m"><b>${esc(w.members?.name)}</b> · ${esc(w.amount)} gouds<br><small>NatCash: ${esc(w.pay_phone)} · ${h} minit pase${h>=60?" ⚠️ depase 1 èdtan":h>=30?" ⚠️ prèske 1 èdtan":""}</small><div class="row" style="margin-top:6px"><button class="g" data-wp="${esc(w.id)}">Peye (fèt)</button><button data-wr="${esc(w.id)}">Rejte</button></div></div>`}).join("")||"<small>Pa gen retrè an atant.</small>";
+ document.querySelectorAll("[data-wp]").forEach(b=>b.onclick=async()=>{if(!confirm("Ou voye lajan an sou NatCash?"))return;try{await api("withdrawals?id=eq."+b.dataset.wp,"PATCH",{status:"paid",paid_at:new Date().toISOString()});load()}catch(e){alert(e.message)}});
+ document.querySelectorAll("[data-wr]").forEach(b=>b.onclick=async()=>{if(!confirm("Rejte demann sa a?"))return;try{await api("withdrawals?id=eq."+b.dataset.wr,"PATCH",{status:"rejected"});load()}catch(e){alert(e.message)}});
  const m=await api("members?select=*&order=joined.desc,name.asc");$("cnt").textContent=m.length;
  $("list").innerHTML=m.map(x=>`<div class="m"><div><b>${esc(x.name)}</b> <span class="tag ${esc(x.status)}">${esc(x.status)}</span><br><small>Tel: ${esc(x.phone||"-")} · Aksè: ${esc(x.code)} · Referans: ${esc(x.referral_code)}<br>Depo: ${esc(x.deposit)} · Bonis: ${Number(x.welcome_bonus)+Number(x.referral_bonus)}</small></div>
  <div class="row" style="margin-top:6px"><input type="number" value="${esc(x.deposit)}" id="d_${esc(x.code)}"><button data-dep="${esc(x.code)}">Sove depo</button>${x.status==="pending"?`<button class="g" data-act="${esc(x.code)}">Konfime peman</button>`:""}</div></div>`).join("")||"<small>Pa gen manb ankò.</small>";
