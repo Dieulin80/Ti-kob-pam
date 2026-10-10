@@ -25,9 +25,10 @@ small{color:var(--mu)}.err{color:var(--p)}
 
 <div id="app" hidden>
 <div class="card"><h2>Pwofi ak pataj</h2>
-<div class="row"><input id="np" type="number" placeholder="Pwofi net mwa a (gouds)"><input id="ml" placeholder="Mwa (egzanp oktòb)"><button id="sv" class="o">Sove</button></div></div>
+<div class="row"><input id="np" type="number" placeholder="Pwofi net mwa a (gouds)"><input id="ml" placeholder="Mwa (egzanp oktòb)"><input id="mr" type="number" placeholder="Plafon % pa mwa (egz. 10)"><button id="sv" class="o">Sove</button></div></div>
 <div class="card"><h2>Ajoute yon manb</h2>
 <div class="row"><input id="an" placeholder="Non"><input id="ap" type="tel" placeholder="Telefòn"><button id="ad">Ajoute</button></div></div>
+<div class="card"><h2>Depo an atant (<span id="dc">0</span>)</h2><div id="dl"></div></div>
 <div class="card"><h2>Retrè an atant (<span id="wc">0</span>)</h2><div id="wl"></div></div>
 <div class="card"><h2>Manb yo (<span id="cnt">0</span>)</h2><div id="list"></div></div>
 </div>
@@ -43,18 +44,23 @@ $("go").onclick=async()=>{$("lerr").textContent="";
  const d=await r.json();if(!r.ok||!d.access_token)throw 0;tok=d.access_token;$("pw").value="";$("login").hidden=true;$("app").hidden=false;load()}
  catch(e){$("lerr").textContent="Imèl oswa modpas pa bon."}};
 async function load(){
- try{const s=await api("settings?id=eq.1");if(s&&s[0]){$("np").value=s[0].net_profit;$("ml").value=s[0].month_label||""}
+ try{const s=await api("settings?id=eq.1");if(s&&s[0]){$("np").value=s[0].net_profit;$("ml").value=s[0].month_label||"";$("mr").value=s[0].max_rate}
+ const dp=await api("deposits?select=*,members(name,phone)&status=eq.pending&order=created_at.asc");$("dc").textContent=dp.length;
+ $("dl").innerHTML=dp.map(w=>`<div class="m"><b>${esc(w.members?.name)}</b> · ${esc(w.amount)} gouds<br><small>ID tranzaksyon: <b>${esc(w.txn_id)}</b><br>Non NatCash: ${esc(w.pay_name)} · Tel: ${esc(w.pay_phone)}<br>${Math.floor((Date.now()-new Date(w.created_at))/6e4)} minit pase</small><div class="row" style="margin-top:6px">${w.proof_path?`<button class="o" data-pf="${esc(w.proof_path)}">Wè screenshot</button>`:"<small>Pa gen screenshot</small>"}<button class="g" data-da="${esc(w.id)}">Apwouve depo</button><button data-dr="${esc(w.id)}">Rejte</button></div></div>`).join("")||"<small>Pa gen depo an atant.</small>";
+ document.querySelectorAll("[data-da]").forEach(b=>b.onclick=async()=>{if(!confirm("Ou verifye ID tranzaksyon an sou NatCash epi montan an kòrèk?"))return;try{await api("deposits?id=eq."+b.dataset.da,"PATCH",{status:"approved"});load()}catch(e){alert(e.message)}});
+ document.querySelectorAll("[data-dr]").forEach(b=>b.onclick=async()=>{if(!confirm("Rejte depo sa a?"))return;try{await api("deposits?id=eq."+b.dataset.dr,"PATCH",{status:"rejected"});load()}catch(e){alert(e.message)}});
+ document.querySelectorAll("[data-pf]").forEach(b=>b.onclick=async()=>{try{const r=await fetch(URL_+"/storage/v1/object/sign/preuves/"+b.dataset.pf,{method:"POST",headers:{"Content-Type":"application/json",apikey:KEY,Authorization:"Bearer "+tok},body:JSON.stringify({expiresIn:300})});const d=await r.json();if(!r.ok||!d.signedURL)throw 0;b.insertAdjacentHTML("afterend",'<a href="'+URL_+"/storage/v1"+d.signedURL+'" target="_blank" rel="noopener" style="font-weight:700">Louvri foto a</a>');b.remove()}catch(e){alert("Pa t kapab louvri screenshot la.")}});
  const wd=await api("withdrawals?select=*,members(name,phone)&status=eq.pending&order=created_at.asc");$("wc").textContent=wd.length;
  $("wl").innerHTML=wd.map(w=>{const h=Math.floor((Date.now()-new Date(w.created_at))/6e4);return `<div class="m"><b>${esc(w.members?.name)}</b> · ${esc(w.amount)} gouds<br><small>NatCash: ${esc(w.pay_phone)} · ${h} minit pase${h>=60?" ⚠️ depase 1 èdtan":h>=30?" ⚠️ prèske 1 èdtan":""}</small><div class="row" style="margin-top:6px"><button class="g" data-wp="${esc(w.id)}">Peye (fèt)</button><button data-wr="${esc(w.id)}">Rejte</button></div></div>`}).join("")||"<small>Pa gen retrè an atant.</small>";
  document.querySelectorAll("[data-wp]").forEach(b=>b.onclick=async()=>{if(!confirm("Ou voye lajan an sou NatCash?"))return;try{await api("withdrawals?id=eq."+b.dataset.wp,"PATCH",{status:"paid",paid_at:new Date().toISOString()});load()}catch(e){alert(e.message)}});
  document.querySelectorAll("[data-wr]").forEach(b=>b.onclick=async()=>{if(!confirm("Rejte demann sa a?"))return;try{await api("withdrawals?id=eq."+b.dataset.wr,"PATCH",{status:"rejected"});load()}catch(e){alert(e.message)}});
  const m=await api("members?select=*&order=joined.desc,name.asc");$("cnt").textContent=m.length;
- $("list").innerHTML=m.map(x=>`<div class="m"><div><b>${esc(x.name)}</b> <span class="tag ${esc(x.status)}">${esc(x.status)}</span><br><small>Tel: ${esc(x.phone||"-")} · Aksè: ${esc(x.code)} · Referans: ${esc(x.referral_code)}<br>Depo: ${esc(x.deposit)} · Bonis: ${Number(x.welcome_bonus)+Number(x.referral_bonus)}</small></div>
+ $("list").innerHTML=m.map(x=>`<div class="m"><div><b>${esc(x.name)}</b> <span class="tag ${esc(x.status)}">${esc(x.status)}</span><br><small>Tel: ${esc(x.phone||"-")} · Aksè: ${esc(x.code)} · Referans: ${esc(x.referral_code)}<br>Non NatCash: ${esc(x.full_name||"-")} · ID peman 250: ${esc(x.fee_txn_id||"-")}<br>Depo: ${esc(x.deposit)} · Bonis: ${Number(x.welcome_bonus)+Number(x.referral_bonus)}</small></div>
  <div class="row" style="margin-top:6px"><input type="number" value="${esc(x.deposit)}" id="d_${esc(x.code)}"><button data-dep="${esc(x.code)}">Sove depo</button>${x.status==="pending"?`<button class="g" data-act="${esc(x.code)}">Konfime peman</button>`:""}</div></div>`).join("")||"<small>Pa gen manb ankò.</small>";
  document.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{if(!confirm("Ou verifye peman NatCash la?"))return;try{await api("members?code=eq."+encodeURIComponent(b.dataset.act),"PATCH",{status:"active"});load()}catch(e){alert(e.message)}});
  document.querySelectorAll("[data-dep]").forEach(b=>b.onclick=async()=>{const v=document.getElementById("d_"+b.dataset.dep).value;try{await api("members?code=eq."+encodeURIComponent(b.dataset.dep),"PATCH",{deposit:Number(v)||0});load()}catch(e){alert(e.message)}});
  }catch(e){alert("Pa gen aksè staff oswa erè: "+e.message)}}
-$("sv").onclick=async()=>{try{await api("settings?id=eq.1","PATCH",{net_profit:Number($("np").value)||0,month_label:$("ml").value});alert("Sove.")}catch(e){alert(e.message)}};
+$("sv").onclick=async()=>{try{await api("settings?id=eq.1","PATCH",{net_profit:Number($("np").value)||0,month_label:$("ml").value,max_rate:Number($("mr").value)||10});alert("Sove.")}catch(e){alert(e.message)}};
 $("ad").onclick=async()=>{const n=$("an").value.trim(),p=$("ap").value.replace(/\D/g,"");if(!n||p.length<8){alert("Antre non ak telefòn.");return}
  try{await api("members","POST",{name:n,phone:p,status:"pending"});$("an").value="";$("ap").value="";load()}catch(e){alert(e.message)}};
 </script></body></html>
