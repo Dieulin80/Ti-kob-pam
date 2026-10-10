@@ -125,10 +125,10 @@ input{flex:1;min-width:180px;padding:13px 14px;border:1px solid var(--line);bord
 
 <section id="enskripsyon">
   <h2>Enskri kounye a</h2>
-  <p class="sub">Peye adezyon an, epi antre nimewo telefòn ou ak kòd referans moun ki envite w la.</p>
+  <p class="sub">Peye adezyon an sou NatCash, epi antre nimewo ou, non konplè ou ak ID tranzaksyon an. Si yon moun envite w, mete kòd referans li a.</p>
   <div class="pay"><span>Peye 250 gouds sou NatCash:</span><b>32399183</b><span>Non: Charles Daniece</span></div>
   <div class="space">
-    <form id="rf"><input id="ph" type="tel" inputmode="tel" placeholder="Nimewo telefòn ou" required><input id="rc" placeholder="Kòd referans (si w genyen)" autocomplete="off"><button class="btn" type="submit">Enskri</button></form>
+    <form id="rf"><input id="ph" type="tel" inputmode="tel" placeholder="Nimewo NatCash ou (telefòn)" required><input id="rn" placeholder="Non konplè ki sou NatCash la" required><input id="rt" placeholder="ID tranzaksyon NatCash la" required><input id="rc" placeholder="Kòd referans (si w genyen)" autocomplete="off"><button class="btn" type="submit">Enskri</button></form>
     <div id="rout"></div>
   </div>
 </section>
@@ -154,9 +154,10 @@ const SUPABASE_ANON_KEY = "sb_publishable_pstIMf9lDGKmvxG3369d1w_xFHtiH4L";
 const $ = id => document.getElementById(id);
 const fmt = n => Number(n).toLocaleString("fr-FR") + " gouds";
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const ERR = {nimewo_pa_bon:"Nimewo telefòn nan pa bon.",kod_referans_pa_bon:"Kòd referans lan pa bon. Verifye l ak moun ki envite w la.",deja_enskri:"Nimewo sa a deja enskri."};
+const ERR = {nimewo_pa_bon:"Nimewo telefòn nan pa bon.",kod_referans_pa_bon:"Kòd referans lan pa bon. Verifye l ak moun ki envite w la.",deja_enskri:"Nimewo sa a deja enskri.",nom_pa_bon:"Antre non konplè ki sou NatCash la.",txn_pa_bon:"ID tranzaksyon an pa bon.",txn_deja_itilize:"ID tranzaksyon sa a deja itilize."};
 const WE = {kod_pa_bon:"Kòd la pa bon.",kont_pa_aktif:"Kont ou poko aktive.",minimom_50:"Minimòm retrè se 50 gouds.",nimewo_pa_bon:"Nimewo NatCash la pa bon.",twop_demann:"Ou gen twòp demann an atant (maksimòm 3).",solde_ensifizan:"Solde ou pa ase pou montan sa a."};
-const ST = {pending:"An atant",paid:"Peye",rejected:"Rejte"};
+const ST = {pending:"An atant",paid:"Peye",approved:"Apwouve",rejected:"Rejte"};
+const DE = {kod_pa_bon:"Kòd la pa bon.",kont_pa_aktif:"Kont ou poko aktive.",montan_pa_bon:"Montan an pa bon.",txn_pa_bon:"ID tranzaksyon an pa bon.",nom_pa_bon:"Antre non konplè ki sou NatCash la.",nimewo_pa_bon:"Nimewo NatCash la pa bon.",foto_pa_bon:"Foto a pa bon.",twop_demann:"Ou gen twòp demann an atant (maksimòm 3).",txn_deja_itilize:"ID tranzaksyon sa a deja itilize."};
 let cur = null, panel = null;
 
 async function rpc(fn, body){
@@ -165,14 +166,25 @@ async function rpc(fn, body){
   return {ok:r.ok, d};
 }
 
+async function prep(file){
+  try {
+    const bmp = await createImageBitmap(file);
+    const sc = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas"); c.width = Math.round(bmp.width * sc); c.height = Math.round(bmp.height * sc);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const b = await new Promise(r => c.toBlob(r, "image/jpeg", 0.8));
+    return b || file;
+  } catch(e) { return file; }
+}
+
 /* ---------- Enskripsyon ---------- */
 $("rf").addEventListener("submit", async e => {
   e.preventDefault();
   const out = $("rout"); out.textContent = "Y ap enskri w...";
   try {
-    const {ok, d} = await rpc("register_member", {p_phone:$("ph").value, p_ref:$("rc").value});
+    const {ok, d} = await rpc("register_member", {p_phone:$("ph").value, p_ref:$("rc").value, p_name:$("rn").value, p_txn:$("rt").value});
     if (!ok) { out.innerHTML = '<p class="err">' + esc(ERR[d && d.message] || "Pa t kapab enskri w. Eseye ankò.") + '</p>'; return; }
-    out.innerHTML = '<p style="margin:16px 0 0"><strong>Enskripsyon w anrejistre!</strong> Sove de kòd sa yo kounye a.</p><div class="codes"><div><b>' + esc(d.code) + '</b><span>Kòd aksè ou (prive): pou louvri kont ou</span></div><div><b>' + esc(d.referral_code) + '</b><span>Kòd referans ou: pou envite lòt moun</span></div></div><p class="sub" style="margin:14px 0">Kont ou ap aktive lè komite a konfime peman 250 gouds ou a sou NatCash.</p><button class="btn" id="enter" type="button">Louvri kont mwen</button>';
+    out.innerHTML = '<p style="margin:16px 0 0"><strong>Enskripsyon w anrejistre!</strong> Sove de kòd sa yo kounye a.</p><div class="codes"><div><b>' + esc(d.code) + '</b><span>Kòd aksè ou (prive): pou louvri kont ou</span></div><div><b>' + esc(d.referral_code) + '</b><span>Kòd referans ou: pou envite lòt moun</span></div></div><p class="sub" style="margin:14px 0">Kont ou ap aktive lè komite a verifye peman 250 gouds ou a (non ak ID tranzaksyon an).</p><button class="btn" id="enter" type="button">Louvri kont mwen</button>';
     $("enter").onclick = () => login(d.code, true);
   } catch(err) { out.innerHTML = '<p class="err">Pa t kapab enskri w. Eseye ankò pita.</p>'; }
 });
@@ -241,9 +253,38 @@ function renderPanel(name){
     pn.innerHTML = '<div class="panel"><h3>Envite moun</h3><p>Kòd referans ou. Ou jwenn 100 gouds pou chak moun ou mennen, ak 15 gouds pou chak moun yo menm yo mennen, apre yo fin peye adezyon an.</p><div class="big">' + esc(d.referral_code) + '</div><p>' + Number(d.referrals) + ' moun enskri ak kòd ou.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="cp">Kopye kòd</button><a class="btn sec" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">WhatsApp</a></div></div>';
     $("cp").onclick = async () => { try { await navigator.clipboard.writeText(d.referral_code); $("cp").textContent = "Kopye ✓"; } catch(e){ alert("Kòd ou a: " + d.referral_code); } };
   } else if (name === "depoze") {
-    pn.innerHTML = '<div class="panel"><h3>Mete lajan sou kont ou</h3><p>Voye lajan an sou NatCash:</p><div class="big">32399183</div><p>Non: Charles Daniece. Apre w fin voye l, komite a konfime epi ajoute montan an sou kont ou. Voye nimewo telefòn ou ak montan an si w bezwen verifikasyon.</p></div>';
+    if (d.status !== "active") { pn.innerHTML = '<div class="panel"><h3>Mete lajan</h3><p>Ou ka mete lajan sèlman apre kont ou aktive.</p></div>'; return; }
+    pn.innerHTML = '<div class="panel"><h3>Mete lajan sou kont ou</h3><p>1. Voye lajan an sou NatCash:</p><div class="big">32399183</div><p>Non: Charles Daniece.<br>2. Apre sa, ranpli fòm nan ak ID tranzaksyon an. Komite a verifye epi ajoute lajan an sou kont ou.</p><form id="df"><input id="da" type="number" min="1" placeholder="Montan ou voye (gouds)" required><input id="dt" placeholder="ID tranzaksyon NatCash" required><input id="dn" placeholder="Non konplè ki sou NatCash la" required><input id="dp" type="tel" placeholder="Nimewo NatCash ou" required><label for="dsc" style="color:var(--muted);font-size:15px">Screenshot peman an (opsyonèl)</label><input id="dsc" type="file" accept="image/*"><button class="btn" type="submit">Voye pou verifikasyon</button></form><div id="dmsg"></div><div id="dh"></div></div>';
+    const loadDeps = async () => {
+      try {
+        const {ok, d:x} = await rpc("get_my_deposits", {p_code:cur.code});
+        if (ok && Array.isArray(x) && x.length) $("dh").innerHTML = '<h3 style="margin-top:16px;font-size:18px">Depo ou yo</h3>' + x.map(h => '<div class="line"><span>' + new Date(h.created_at).toLocaleDateString("fr-FR") + ' · ' + fmt(h.amount) + '</span><b>' + esc(ST[h.status] || h.status) + '</b></div>').join("");
+      } catch(e){}
+    };
+    loadDeps();
+    $("df").addEventListener("submit", async e => {
+      e.preventDefault(); const m = $("dmsg"); m.textContent = "Y ap voye...";
+      try {
+        let proof = "";
+        const fl = $("dsc").files[0];
+        if (fl) {
+          const blob = await prep(fl);
+          if (blob.size > 3145728) { m.innerHTML = '<p class="err">Foto a twò gwo (maksimòm 3 MB).</p>'; return; }
+          const ext = blob.type === "image/png" ? ".png" : blob.type === "image/webp" ? ".webp" : ".jpg";
+          const nm = (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random().toString(36).slice(2)) + ext;
+          const up = await fetch(SUPABASE_URL + "/storage/v1/object/preuves/" + nm, {method:"POST", headers:{apikey:SUPABASE_ANON_KEY, "Content-Type":blob.type || "image/jpeg"}, body:blob});
+          if (!up.ok) { m.innerHTML = '<p class="err">Pa t kapab voye screenshot la. Eseye ankò oswa retire l.</p>'; return; }
+          proof = nm;
+        }
+        const {ok, d:x} = await rpc("request_deposit", {p_code:cur.code, p_amount:Number($("da").value), p_txn:$("dt").value, p_name:$("dn").value, p_phone:$("dp").value, p_proof:proof});
+        if (!ok) { m.innerHTML = '<p class="err">' + esc(DE[x && x.message] || "Pa t kapab voye demann lan.") + '</p>'; return; }
+        $("df").reset(); m.innerHTML = '<p style="color:var(--green);font-weight:600">Demann voye. Komite a ap verifye l.</p>'; loadDeps();
+      } catch(err) { m.innerHTML = '<p class="err">Pa t kapab voye demann lan. Eseye ankò.</p>'; }
+    });
   } else if (name === "pataj") {
-    pn.innerHTML = '<div class="panel"><h3>Pataj pwofi</h3><div class="line"><span>Mwa</span><b>' + esc(d.month || "-") + '</b></div><div class="line"><span>Estimasyon pa w</span><b>≈ ' + fmt(d.estimate) + '</b></div><p style="margin-top:12px">Se yon estimasyon, li pa garanti. Li depann de pwofi reyèl atelye a ak sa ou mete nan biznis la.</p></div>';
+    pn.innerHTML = '<div class="panel"><h3>Pataj pwofi</h3><div class="line"><span>Mwa</span><b>' + esc(d.month || "-") + '</b></div><div class="line"><span>Estimasyon pa w</span><b>≈ ' + fmt(d.estimate) + '</b></div><p style="margin-top:12px">Se yon estimasyon, li pa garanti. Li depann de pwofi reyèl atelye a ak sa ou mete nan biznis la.</p><h3 style="margin-top:18px;font-size:18px">Similasyon</h3><p>Si w mete lajan nan biznis la, konbyen ou ta ka jwenn apeprè chak mwa?</p><input id="sx" type="number" min="1" value="50" placeholder="Montan (gouds)"><div class="big" id="sr" style="font-size:24px"></div><p>Se yon similasyon, pa yon pwomès. Estimasyon an pa janm depase ' + Number(d.max_rate || 10) + ' % pa mwa.</p></div>';
+    const sim = () => { const x = Math.max(Number($("sx").value) || 0, 0), T = Number(d.capital_total) || 0, P = Number(d.pool) || 0, cap = x * (Number(d.max_rate) || 10) / 100, raw = (T + x) > 0 ? P * x / (T + x) : 0; $("sr").textContent = "≈ " + fmt(Math.round(Math.min(raw, cap))) + " pa mwa"; };
+    $("sx").addEventListener("input", sim); sim();
   }
 }
 
