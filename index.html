@@ -14,20 +14,19 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 "Source Sans 3",system-ui,sans-serif}
 h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.1;margin:0}
+[hidden]{display:none!important}
 .wrap{max-width:960px;margin:0 auto;padding:0 20px}
 header{padding:20px 0;display:flex;justify-content:space-between;align-items:center}
 .logo{font:800 20px "Bricolage Grotesque",system-ui,sans-serif}
 .logo span{display:inline-block;width:10px;height:16px;border-radius:3px 3px 5px 5px;margin-right:3px;vertical-align:-2px}
 nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:15px}
+nav a.cta{background:var(--btn);color:var(--btnink);padding:8px 14px;border-radius:8px;font-weight:600}
 .hero{padding:36px 0 56px;display:grid;gap:36px}
 @media(min-width:760px){.hero{grid-template-columns:1.2fr 1fr;align-items:center}}
 h1{font-size:clamp(34px,7vw,58px);font-weight:800;letter-spacing:-.02em}
 .lead{color:var(--muted);font-size:19px;max-width:46ch;margin:18px 0 26px}
-.btn{display:inline-block;background:var(--btn);color:var(--btnink);padding:14px 24px;border-radius:10px;font-weight:600;text-decoration:none}
-.sachets{display:flex;gap:14px;justify-content:center;align-items:flex-end}
-.sachet{width:84px;border-radius:10px 10px 22px 22px;position:relative;box-shadow:inset 0 -10px 0 rgba(0,0,0,.12)}
-.sachet::before{content:"";position:absolute;top:0;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 5px,transparent 5px 10px);border-radius:10px 10px 0 0}
-.s1{height:210px;background:var(--orange)}.s2{height:260px;background:var(--green)}.s3{height:180px;background:var(--pink)}
+.btn{display:inline-block;background:var(--btn);color:var(--btnink);padding:14px 24px;border-radius:10px;font-weight:600;text-decoration:none;border:0;cursor:pointer;font:600 17px "Source Sans 3",system-ui,sans-serif}
+.photo{margin:0}.photo img{width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:16px;border:1px solid var(--line);display:block}.photo figcaption{color:var(--muted);font-size:14px;margin-top:8px}
 .facts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-bottom:56px}
 .fact{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
 .fact b{font:800 34px "Bricolage Grotesque",system-ui,sans-serif;display:block}
@@ -44,38 +43,54 @@ h2{font-size:clamp(26px,5vw,36px);margin-bottom:10px}
 .note{border-left:5px solid var(--orange);background:var(--surface);border-radius:0 14px 14px 0;padding:20px 22px}
 .note p{margin:6px 0 0;color:var(--muted)}
 footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);font-size:15px}
-
-.space{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
-.space form{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.space input{flex:1;min-width:200px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
-.space button{border:0;cursor:pointer;font:600 17px "Source Sans 3",system-ui,sans-serif}
-.res{margin-top:20px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
-.res div{border:1px solid var(--line);border-radius:12px;padding:14px}
-.res b{display:block;font:800 26px "Bricolage Grotesque",system-ui,sans-serif}
-.res span{color:var(--muted);font-size:15px}
-.err{color:var(--pink);margin-top:14px}
-:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
-.photo{margin:0}.photo img{width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:16px;border:1px solid var(--line);display:block}.photo figcaption{color:var(--muted);font-size:14px;margin-top:8px}
 .pay{border-left:5px solid var(--green);background:var(--surface);border-radius:0 14px 14px 0;padding:18px 22px;margin-bottom:18px}
 .pay b{font:800 24px "Bricolage Grotesque",system-ui,sans-serif;display:block}
+.space{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px}
+.space form{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+input{flex:1;min-width:180px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.err{color:var(--pink);margin-top:14px}
 .codes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:16px}
 .codes div{border:2px solid var(--orange);border-radius:12px;padding:14px}
 .codes b{display:block;font:800 24px "Bricolage Grotesque",system-ui,sans-serif;word-break:break-all}
 .codes span{color:var(--muted);font-size:15px}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+/* ---- WALLET ---- */
+.wallet{max-width:520px;margin:0 auto;padding:0 16px 48px}
+.wbar{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.wbar button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:8px 12px;font:600 14px system-ui,sans-serif;cursor:pointer}
+.bal{background:linear-gradient(135deg,#0F2A43,#1E5B8A);color:#fff;border-radius:22px;padding:24px 22px}
+.bal small{opacity:.8;font-size:15px}
+.amt{font:800 42px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:6px 0 14px;word-break:break-word}
+.bal .est{display:inline-block;background:rgba(255,255,255,.15);border-radius:99px;padding:5px 12px;font-size:14px}
+.banner{background:var(--orange);color:#1b1206;border-radius:12px;padding:12px 14px;margin-top:14px;font-weight:600}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 10px;text-align:center;cursor:pointer;color:var(--ink);font:600 16px "Source Sans 3",system-ui,sans-serif}
+.tile i{display:block;font-style:normal;font-size:28px;margin-bottom:4px}
+.tile.on{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+.panel h3{font-size:21px;margin-bottom:10px}
+.panel p{color:var(--muted);margin:0 0 12px}
+.panel form{display:flex;flex-direction:column;gap:10px}
+.line{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line)}
+.line:first-of-type{border-top:0}
+.big{font:800 30px "Bricolage Grotesque",system-ui,sans-serif;word-break:break-all;margin:6px 0 12px}
+.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
 </style>
 </head>
 <body>
+
+<div id="site">
 <div class="wrap">
 <header>
   <div class="logo"><span style="background:var(--orange)"></span><span style="background:var(--green)"></span><span style="background:var(--pink)"></span>Ti Kòb Pam</div>
-  <nav><a href="#kijan">Kijan l mache</a><a href="#regl">Règ yo</a></nav>
+  <nav><a href="#kijan">Kijan l mache</a><a href="#regl">Règ yo</a><a class="cta" href="#espas">Konekte</a></nav>
 </header>
 
 <div class="hero">
   <div>
     <h1>Yon biznis jis reyèl, ou ka pran pati ladan l.</h1>
     <p class="lead">Nou fè jis nan sachè nan pwòp atelye nou. Antre kòm manb, mete epay ou, epi resevwa yon pataj pwofi reyèl biznis la.</p>
-    <a class="btn" href="#kijan">Kijan pou antre</a>
+    <a class="btn" href="#enskripsyon">Enskri kounye a</a>
   </div>
   <figure class="photo"><img src="atelye.jpg" alt="Atelye nou an: machin ki ranpli sachè jis ak travayè k ap travay" width="1100" height="1467"><figcaption>Atelye nou an, vrè machin nou yo.</figcaption></figure>
 </div>
@@ -83,7 +98,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
 <div class="facts">
   <div class="fact"><b>4</b><span>machin ki ranpli sachè</span></div>
   <div class="fact"><b>500</b><span>sachè pa machin chak jou</span></div>
-  <div class="fact"><b>30</b><span>manb deja nan òganizasyon an</span></div>
+  <div class="fact"><b>&lt; 1 èdtan</b><span>pou peye yon retrè</span></div>
 </div>
 
 <section id="kijan">
@@ -91,11 +106,11 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
   <p class="sub">Senp, ak chif klè.</p>
   <div class="grid">
     <div class="card"><span class="tag o">250 gouds</span><h3>Adezyon</h3><p>Ou peye 250 gouds yon sèl fwa pou vin manb. Sa kouvri sit la ak jesyon òganizasyon an.</p></div>
-    <div class="card"><span class="tag g">Retrè lib</span><h3>Epay ou</h3><p>Ou ka mete lajan sou kont ou. Se lajan w, ou ka retire l lè w bezwen li, san minimòm pou ou rive.</p></div>
+    <div class="card"><span class="tag g">Retrè rapid</span><h3>Epay ou</h3><p>Ou ka mete lajan sou kont ou. Retrè: minimòm 50 gouds, bonis yo enkli, e nou peye nan mwens ke 1 èdtan.</p></div>
     <div class="card"><span class="tag p">Chak mwa</span><h3>Pataj pwofi</h3><p>Nou pataje yon pati nan pwofi reyèl atelye a ak manb yo, selon sa chak moun mete. Pousantaj la depann de vant yo.</p></div>
-    <div class="card"><span class="tag o">25 gouds</span><h3>Bonis byenveni</h3><p>Chak nouvo manb resevwa 25 gouds sou kont li lè l antre.</p></div>
-    <div class="card"><span class="tag g">100 gouds</span><h3>Bonis parennaj</h3><p>Si w mennen yon moun nan òganizasyon an, ou resevwa 100 gouds apre li fin peye 250 gouds adezyon an. Bonis la se pou moun ou mennen dirèkteman sèlman.</p></div>
-    <div class="card"><span class="tag p">Disponib</span><h3>Espas manb</h3><p>Chak manb ap antre ak kòd li pou wè solde li, depo li yo ak pataj pwofi li.</p></div>
+    <div class="card"><span class="tag o">10 gouds</span><h3>Bonis byenveni</h3><p>Chak nouvo manb resevwa 10 gouds sou kont li lè kont li aktive.</p></div>
+    <div class="card"><span class="tag g">100 gouds</span><h3>Bonis parennaj</h3><p>Si w mennen yon moun, ou resevwa 100 gouds apre li fin peye 250 gouds adezyon an. Si moun ou mennen an mennen yon lòt moun, ou resevwa 15 gouds. Nou pa peye plis pase 2 nivo.</p></div>
+    <div class="card"><span class="tag p">Kont ou</span><h3>Yon wallet senp</h3><p>Konekte ak kòd ou pou wè solde w, mande yon retrè, ak envite lòt moun, tout nan yon sèl kote.</p></div>
   </div>
 </section>
 
@@ -104,7 +119,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
   <p class="sub">Nou pa pwomèt pousantaj garanti. Pwofi a soti nan vant jis la.</p>
   <div class="note">
     <strong>Anvan w antre, konnen sa:</strong>
-    <p>Pwofi pa garanti. Si vant yo bese, pataj la bese tou. Se pou sa nou montre rezilta reyèl yo bay manb yo chak mwa, epi nou kenbe yon rezèv pou jou ki pa bon yo.</p>
+    <p>Pwofi pa garanti. Si vant yo bese, pataj la bese tou. Se pou sa nou montre rezilta reyèl yo bay manb yo chak mwa, epi nou kenbe yon rezèv pou jou ki pa bon yo.</p><p>Bonis parennaj yo (100 ak 15 gouds) soti nan frè adezyon nouvo manb yo. Yo pa garanti, yo depann de nouvo moun k ap antre, e yo bay sèlman apre peman 250 gouds la konfime.</p>
   </div>
 </section>
 
@@ -119,60 +134,121 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
 </section>
 
 <section id="espas">
-  <h2>Espas manb</h2>
-  <p class="sub">Antre kòd ou pou wè solde w ak estimasyon pataj pwofi w pou mwa a.</p>
+  <h2>Konekte nan kont ou</h2>
+  <p class="sub">Antre kòd aksè ou pou louvri wallet ou.</p>
   <div class="space">
-    <form id="f"><input id="code" placeholder="Kòd ou" autocomplete="off" required><button class="btn" type="submit">Gade solde m</button></form>
+    <form id="f"><input id="code" placeholder="Kòd aksè ou" autocomplete="off" required><button class="btn" type="submit">Louvri kont mwen</button></form>
     <div id="out"></div>
   </div>
 </section>
 
 <footer>© Ti Kòb Pam. Nou pale sou biznis la ak manb yo ouvètman.</footer>
 </div>
+</div>
+
+<div id="wallet" class="wallet" hidden></div>
+
 <script>
-const SUPABASE_URL = "https://qmnocwhjkxqzjycnzeki.supabase.co";      // egzanp: https://abcd1234.supabase.co
-const SUPABASE_ANON_KEY = "sb_publishable_pstIMf9lDGKmvxG3369d1w_xFHtiH4L";     // kle "anon public" nan Supabase
+const SUPABASE_URL = "https://qmnocwhjkxqzjycnzeki.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_pstIMf9lDGKmvxG3369d1w_xFHtiH4L";
+const $ = id => document.getElementById(id);
 const fmt = n => Number(n).toLocaleString("fr-FR") + " gouds";
-document.getElementById("f").addEventListener("submit", async e => {
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ERR = {nimewo_pa_bon:"Nimewo telefòn nan pa bon.",kod_referans_pa_bon:"Kòd referans lan pa bon. Verifye l ak moun ki envite w la.",deja_enskri:"Nimewo sa a deja enskri."};
+const WE = {kod_pa_bon:"Kòd la pa bon.",kont_pa_aktif:"Kont ou poko aktive.",minimom_50:"Minimòm retrè se 50 gouds.",nimewo_pa_bon:"Nimewo NatCash la pa bon.",twop_demann:"Ou gen twòp demann an atant (maksimòm 3).",solde_ensifizan:"Solde ou pa ase pou montan sa a."};
+const ST = {pending:"An atant",paid:"Peye",rejected:"Rejte"};
+let cur = null, panel = null;
+
+async function rpc(fn, body){
+  const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/" + fn, {method:"POST", headers:{"Content-Type":"application/json", apikey:SUPABASE_ANON_KEY}, body:JSON.stringify(body)});
+  let d = null; try { d = await r.json(); } catch(e){}
+  return {ok:r.ok, d};
+}
+
+/* ---------- Enskripsyon ---------- */
+$("rf").addEventListener("submit", async e => {
   e.preventDefault();
-  const out = document.getElementById("out");
-  const code = document.getElementById("code").value.trim();
-  out.textContent = "Y ap chèche...";
+  const out = $("rout"); out.textContent = "Y ap enskri w...";
   try {
-    const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/get_my_space", {
-      method: "POST",
-      headers: {"Content-Type": "application/json", apikey: SUPABASE_ANON_KEY},
-      body: JSON.stringify({p_code: code})
-    });
-    const d = await r.json();
-    if (!r.ok) throw new Error();
-    if (!d) { out.innerHTML = '<p class="err">Kòd sa a pa egziste. Verifye l epi eseye ankò.</p>'; return; }
-    const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-    out.innerHTML = '<p style="margin:16px 0 0"><strong>Bonjou ' + esc(d.name) + '</strong></p><div class="res">' +
-      '<div><b>' + fmt(d.balance) + '</b><span>Solde total</span></div>' +
-      '<div><b>' + fmt(d.deposit) + '</b><span>Depo ou</span></div>' +
-      '<div><b>' + fmt(d.welcome_bonus + d.referral_bonus) + '</b><span>Bonis yo</span></div>' +
-      '<div><b>' + esc(d.referral_code) + '</b><span>Kòd referans ou (' + d.referrals + ' moun enskri)</span></div>' +
-      (d.status === 'pending' ? '<div><b>An atant</b><span>Peman 250 gouds poko konfime</span></div>' : '') +
-      '<div><b>≈ ' + fmt(d.estimate) + '</b><span>Estimasyon pataj ' + esc(d.month || "mwa sa a") + '</span></div></div>' +
-      '<p class="sub" style="margin-top:14px">Estimasyon an pa garanti: li depann de pwofi reyèl atelye a.</p>';
-  } catch (err) {
-    out.innerHTML = '<p class="err">Pa t kapab chaje done yo. Eseye ankò pita.</p>';
-  }
+    const {ok, d} = await rpc("register_member", {p_phone:$("ph").value, p_ref:$("rc").value});
+    if (!ok) { out.innerHTML = '<p class="err">' + esc(ERR[d && d.message] || "Pa t kapab enskri w. Eseye ankò.") + '</p>'; return; }
+    out.innerHTML = '<p style="margin:16px 0 0"><strong>Enskripsyon w anrejistre!</strong> Sove de kòd sa yo kounye a.</p><div class="codes"><div><b>' + esc(d.code) + '</b><span>Kòd aksè ou (prive): pou louvri kont ou</span></div><div><b>' + esc(d.referral_code) + '</b><span>Kòd referans ou: pou envite lòt moun</span></div></div><p class="sub" style="margin:14px 0">Kont ou ap aktive lè komite a konfime peman 250 gouds ou a sou NatCash.</p><button class="btn" id="enter" type="button">Louvri kont mwen</button>';
+    $("enter").onclick = () => login(d.code, true);
+  } catch(err) { out.innerHTML = '<p class="err">Pa t kapab enskri w. Eseye ankò pita.</p>'; }
 });
 
-const ERR={nimewo_pa_bon:"Nimewo telefòn nan pa bon.",kod_referans_pa_bon:"Kòd referans lan pa bon. Verifye l ak moun ki envite w la.",deja_enskri:"Nimewo sa a deja enskri."};
-document.getElementById("rf").addEventListener("submit", async e => {
-  e.preventDefault();
-  const out=document.getElementById("rout");
-  out.textContent="Y ap enskri w...";
-  try{
-    const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/register_member",{method:"POST",headers:{"Content-Type":"application/json",apikey:SUPABASE_ANON_KEY},body:JSON.stringify({p_phone:document.getElementById("ph").value,p_ref:document.getElementById("rc").value})});
-    const d=await r.json();
-    if(!r.ok){out.innerHTML='<p class="err">'+(ERR[d.message]||"Pa t kapab enskri w. Eseye ankò.")+'</p>';return;}
-    out.innerHTML='<p style="margin:16px 0 0"><strong>Enskripsyon w anrejistre!</strong> Sove de kòd sa yo kounye a.</p><div class="codes"><div><b>'+d.code+'</b><span>Kòd aksè ou (prive): pou wè solde w nan Espas manb</span></div><div><b>'+d.referral_code+'</b><span>Kòd referans ou: pou envite lòt moun</span></div></div><p class="sub" style="margin-top:14px">Kont ou ap aktive lè komite a konfime peman 250 gouds ou a sou NatCash.</p>';
-  }catch(err){out.innerHTML='<p class="err">Pa t kapab enskri w. Eseye ankò pita.</p>';}
-});
+/* ---------- Koneksyon ---------- */
+$("f").addEventListener("submit", e => { e.preventDefault(); login($("code").value.trim(), true); });
+
+async function login(code, loud, keepPanel){
+  const out = $("out");
+  if (loud) out.textContent = "Y ap chèche...";
+  try {
+    const {ok, d} = await rpc("get_my_space", {p_code:code});
+    if (!ok) throw 0;
+    if (!d) { if (loud) out.innerHTML = '<p class="err">Kòd sa a pa egziste. Verifye l epi eseye ankò.</p>'; try { sessionStorage.removeItem("tkp"); } catch(e){} return; }
+    try { sessionStorage.setItem("tkp", code); } catch(e){}
+    cur = {d, code}; if (!keepPanel) panel = null;
+    showWallet();
+  } catch(err) { if (loud) out.innerHTML = '<p class="err">Pa t kapab chaje done yo. Eseye ankò pita.</p>'; }
+}
+function logout(){
+  try { sessionStorage.removeItem("tkp"); } catch(e){}
+  cur = null; panel = null; $("wallet").hidden = true; $("site").hidden = false; $("code").value = ""; $("out").innerHTML = ""; window.scrollTo(0,0);
+}
+
+/* ---------- Wallet ---------- */
+function showWallet(){
+  const d = cur.d;
+  $("site").hidden = true; $("wallet").hidden = false;
+  const tiles = [["retire","💸","Retire"],["istorik","📜","Istorik"],["envite","🤝","Envite"],["depoze","➕","Mete lajan"],["pataj","📈","Pataj pwofi"]];
+  $("wallet").innerHTML =
+    '<div class="wbar"><div class="logo"><span style="background:var(--orange)"></span><span style="background:var(--green)"></span><span style="background:var(--pink)"></span>Ti Kòb Pam</div><button id="lo">Dekonekte</button></div>' +
+    '<div class="bal"><small>Bonjou ' + esc(d.name) + '</small><div class="amt">' + fmt(d.balance) + '</div><span class="est">Pataj estime ' + esc(d.month || "mwa sa a") + ': ≈ ' + fmt(d.estimate) + '</span>' +
+    (d.status === "pending" ? '<div class="banner">Kont ou an atant: peman 250 gouds la poko konfime.</div>' : '') + '</div>' +
+    '<div class="tiles">' + tiles.map(t => '<button class="tile' + (panel === t[0] ? ' on' : '') + '" data-p="' + t[0] + '"><i>' + t[1] + '</i>' + t[2] + '</button>').join("") + '</div>' +
+    '<div id="pn"></div>';
+  $("lo").onclick = logout;
+  document.querySelectorAll(".tile").forEach(b => b.onclick = () => { panel = (panel === b.dataset.p ? null : b.dataset.p); showWallet(); if (panel) $("pn").scrollIntoView({behavior:"smooth", block:"nearest"}); });
+  if (panel) renderPanel(panel);
+}
+
+function renderPanel(name){
+  const d = cur.d, pn = $("pn");
+  if (name === "retire") {
+    if (d.status !== "active") { pn.innerHTML = '<div class="panel"><h3>Retire</h3><p>Ou ka retire sèlman apre kont ou aktive.</p></div>'; return; }
+    pn.innerHTML = '<div class="panel"><h3>Retire lajan</h3><p>Disponib: <b>' + fmt(d.balance) + '</b>. Minimòm 50 gouds, bonis yo enkli. Nou peye nan mwens ke 1 èdtan sou NatCash.</p><form id="wf"><input id="wa" type="number" min="50" placeholder="Montan (gouds)" required><input id="wp" type="tel" placeholder="Nimewo NatCash ou" required><button class="btn" type="submit">Mande retrè</button></form><div id="wmsg"></div></div>';
+    $("wf").addEventListener("submit", async e => {
+      e.preventDefault(); const m = $("wmsg"); m.textContent = "Y ap voye...";
+      try {
+        const {ok, d:x} = await rpc("request_withdrawal", {p_code:cur.code, p_amount:Number($("wa").value), p_phone:$("wp").value});
+        if (!ok) { m.innerHTML = '<p class="err">' + esc(WE[x && x.message] || "Pa t kapab voye demann lan.") + '</p>'; return; }
+        panel = "istorik"; await login(cur.code, false, true);
+        alert("Demann retrè w la voye. Nou peye nan mwens ke 1 èdtan.");
+      } catch(err) { m.innerHTML = '<p class="err">Pa t kapab voye demann lan. Eseye ankò.</p>'; }
+    });
+  } else if (name === "istorik") {
+    const rows = (d.history || []).map(h => '<div class="line"><span>' + new Date(h.created_at).toLocaleDateString("fr-FR") + ' · ' + fmt(h.amount) + '</span><b>' + esc(ST[h.status] || h.status) + '</b></div>').join("");
+    pn.innerHTML = '<div class="panel"><h3>Istorik</h3>' +
+      '<div class="line"><span>Depo ou</span><b>' + fmt(d.deposit) + '</b></div>' +
+      '<div class="line"><span>Bonis byenveni</span><b>' + fmt(d.welcome_bonus) + '</b></div>' +
+      '<div class="line"><span>Bonis parennaj</span><b>' + fmt(d.referral_bonus) + '</b></div>' +
+      '<div class="line"><span>Retire (peye + an atant)</span><b>' + fmt(d.withdrawn) + '</b></div>' +
+      '<h3 style="margin-top:16px;font-size:18px">Retrè yo</h3>' + (rows || '<p>Pa gen retrè ankò.</p>') + '</div>';
+  } else if (name === "envite") {
+    const link = location.origin + location.pathname;
+    const msg = "Antre nan Ti Kòb Pam. Peye 250 gouds epi itilize kòd referans mwen: " + d.referral_code + " " + link;
+    pn.innerHTML = '<div class="panel"><h3>Envite moun</h3><p>Kòd referans ou. Ou jwenn 100 gouds pou chak moun ou mennen, ak 15 gouds pou chak moun yo menm yo mennen, apre yo fin peye adezyon an.</p><div class="big">' + esc(d.referral_code) + '</div><p>' + Number(d.referrals) + ' moun enskri ak kòd ou.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="cp">Kopye kòd</button><a class="btn sec" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(msg) + '">WhatsApp</a></div></div>';
+    $("cp").onclick = async () => { try { await navigator.clipboard.writeText(d.referral_code); $("cp").textContent = "Kopye ✓"; } catch(e){ alert("Kòd ou a: " + d.referral_code); } };
+  } else if (name === "depoze") {
+    pn.innerHTML = '<div class="panel"><h3>Mete lajan sou kont ou</h3><p>Voye lajan an sou NatCash:</p><div class="big">32399183</div><p>Non: Charles Daniece. Apre w fin voye l, komite a konfime epi ajoute montan an sou kont ou. Voye nimewo telefòn ou ak montan an si w bezwen verifikasyon.</p></div>';
+  } else if (name === "pataj") {
+    pn.innerHTML = '<div class="panel"><h3>Pataj pwofi</h3><div class="line"><span>Mwa</span><b>' + esc(d.month || "-") + '</b></div><div class="line"><span>Estimasyon pa w</span><b>≈ ' + fmt(d.estimate) + '</b></div><p style="margin-top:12px">Se yon estimasyon, li pa garanti. Li depann de pwofi reyèl atelye a ak sa ou mete nan biznis la.</p></div>';
+  }
+}
+
+/* Rekonekte otomatikman nan menm tab la */
+try { const c = sessionStorage.getItem("tkp"); if (c) login(c, false); } catch(e){}
 </script>
 </body>
 </html>
