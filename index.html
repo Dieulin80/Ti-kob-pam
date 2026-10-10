@@ -56,6 +56,12 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
 .err{color:var(--pink);margin-top:14px}
 :focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 .photo{margin:0}.photo img{width:100%;height:auto;max-height:520px;object-fit:cover;border-radius:16px;border:1px solid var(--line);display:block}.photo figcaption{color:var(--muted);font-size:14px;margin-top:8px}
+.pay{border-left:5px solid var(--green);background:var(--surface);border-radius:0 14px 14px 0;padding:18px 22px;margin-bottom:18px}
+.pay b{font:800 24px "Bricolage Grotesque",system-ui,sans-serif;display:block}
+.codes{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:16px}
+.codes div{border:2px solid var(--orange);border-radius:12px;padding:14px}
+.codes b{display:block;font:800 24px "Bricolage Grotesque",system-ui,sans-serif;word-break:break-all}
+.codes span{color:var(--muted);font-size:15px}
 </style>
 </head>
 <body>
@@ -102,6 +108,16 @@ footer{border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);f
   </div>
 </section>
 
+<section id="enskripsyon">
+  <h2>Enskri kounye a</h2>
+  <p class="sub">Peye adezyon an, epi antre nimewo telefòn ou ak kòd referans moun ki envite w la.</p>
+  <div class="pay"><span>Peye 250 gouds sou NatCash:</span><b>32399183</b><span>Non: Charles Daniece</span></div>
+  <div class="space">
+    <form id="rf"><input id="ph" type="tel" inputmode="tel" placeholder="Nimewo telefòn ou" required><input id="rc" placeholder="Kòd referans (si w genyen)" autocomplete="off"><button class="btn" type="submit">Enskri</button></form>
+    <div id="rout"></div>
+  </div>
+</section>
+
 <section id="espas">
   <h2>Espas manb</h2>
   <p class="sub">Antre kòd ou pou wè solde w ak estimasyon pataj pwofi w pou mwa a.</p>
@@ -136,11 +152,26 @@ document.getElementById("f").addEventListener("submit", async e => {
       '<div><b>' + fmt(d.balance) + '</b><span>Solde total</span></div>' +
       '<div><b>' + fmt(d.deposit) + '</b><span>Depo ou</span></div>' +
       '<div><b>' + fmt(d.welcome_bonus + d.referral_bonus) + '</b><span>Bonis yo</span></div>' +
+      '<div><b>' + esc(d.referral_code) + '</b><span>Kòd referans ou (' + d.referrals + ' moun enskri)</span></div>' +
+      (d.status === 'pending' ? '<div><b>An atant</b><span>Peman 250 gouds poko konfime</span></div>' : '') +
       '<div><b>≈ ' + fmt(d.estimate) + '</b><span>Estimasyon pataj ' + esc(d.month || "mwa sa a") + '</span></div></div>' +
       '<p class="sub" style="margin-top:14px">Estimasyon an pa garanti: li depann de pwofi reyèl atelye a.</p>';
   } catch (err) {
     out.innerHTML = '<p class="err">Pa t kapab chaje done yo. Eseye ankò pita.</p>';
   }
+});
+
+const ERR={nimewo_pa_bon:"Nimewo telefòn nan pa bon.",kod_referans_pa_bon:"Kòd referans lan pa bon. Verifye l ak moun ki envite w la.",deja_enskri:"Nimewo sa a deja enskri."};
+document.getElementById("rf").addEventListener("submit", async e => {
+  e.preventDefault();
+  const out=document.getElementById("rout");
+  out.textContent="Y ap enskri w...";
+  try{
+    const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/register_member",{method:"POST",headers:{"Content-Type":"application/json",apikey:SUPABASE_ANON_KEY},body:JSON.stringify({p_phone:document.getElementById("ph").value,p_ref:document.getElementById("rc").value})});
+    const d=await r.json();
+    if(!r.ok){out.innerHTML='<p class="err">'+(ERR[d.message]||"Pa t kapab enskri w. Eseye ankò.")+'</p>';return;}
+    out.innerHTML='<p style="margin:16px 0 0"><strong>Enskripsyon w anrejistre!</strong> Sove de kòd sa yo kounye a.</p><div class="codes"><div><b>'+d.code+'</b><span>Kòd aksè ou (prive): pou wè solde w nan Espas manb</span></div><div><b>'+d.referral_code+'</b><span>Kòd referans ou: pou envite lòt moun</span></div></div><p class="sub" style="margin-top:14px">Kont ou ap aktive lè komite a konfime peman 250 gouds ou a sou NatCash.</p>';
+  }catch(err){out.innerHTML='<p class="err">Pa t kapab enskri w. Eseye ankò pita.</p>';}
 });
 </script>
 </body>
